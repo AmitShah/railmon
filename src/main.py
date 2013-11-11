@@ -123,10 +123,9 @@ class DevicesHandler(BaseHandler):
 from tornado.escape import json_encode
 class EventHandler(BaseHandler):
     def post(self):
-        rfidTagNum = self.get_argument("rfidTagNum", 0)
         start = self.get_argument("start", 0)
         end = self.get_argument("end", 0)
-        events = self.database.get_events(rfidTagNum,start,end)
+        events = self.database.get_events(start,end)
         self.write(json_encode(events))
     
 if __name__ == '__main__':
@@ -167,7 +166,7 @@ if __name__ == '__main__':
     callback = functools.partial(data_handler, s)
     ioloop = tornado.ioloop.IOLoop.instance()
     ioloop.add_handler(s.fileno(), callback, ioloop.READ)    
-    #ioloop.add_callback(connect_to_service)
+    ioloop.add_callback(connect_to_service)
         
     #define all the services
     services = dict(

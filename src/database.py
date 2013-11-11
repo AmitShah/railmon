@@ -41,14 +41,14 @@ class DatabaseService(object):
         finally:
             cursor.close()
         
-    def get_events(self,rfidTagNum=0,start=0,end=0):
-        cmd = "SELECT * FROM HISTORY where rfidTagNum=%s and timestamp >= %s and timestamp <=%s"
+    def get_events(self,start=0,end=0):
+        cmd = "SELECT * FROM HISTORY where timestamp >= %s and timestamp <=%s and gforce > 0 and not latitude=0 and not longitude=0"
         cursor = None
         result = None
         try:
             self.connection.ping(reconnect=True)
             cursor = self.connection.cursor(pymysql.cursors.DictCursor)
-            cursor.execute(cmd,(rfidTagNum,start,end))
+            cursor.execute(cmd,(start,end))
             result = cursor.fetchall()
         except:
             pass
