@@ -212,14 +212,16 @@
 				
 				  rfid = {};  
 				  rfidList = [];
-				  for (var d in data){				    
-				  	data[d].date = new Date(data[d].timestamp * 1000);
-				    data[d].close = +data[d].gforce;
-				    if(!rfid.hasOwnProperty(+data[d].rfidTagNum)){
-				    	rfid[+data[d].rfidTagNum] = [];
-				    	rfidList.push(+data[d].rfidTagNum);
+				  for (var d in data){		
+				  	if(+data[d].rfidTagNum >0){		    
+					  	data[d].date = new Date(data[d].timestamp * 1000);
+					    data[d].close = +data[d].gforce;
+					    if(!rfid.hasOwnProperty(+data[d].rfidTagNum)){
+					    	rfid[+data[d].rfidTagNum] = [];
+					    	rfidList.push(+data[d].rfidTagNum);
+					    }
+					    rfid[+data[d].rfidTagNum].push(data[d]);
 				    }
-				    rfid[+data[d].rfidTagNum].push(data[d]);
 				  }
 				  
 				  x.domain(d3.extent(data, function(d) { return d.date; }));
