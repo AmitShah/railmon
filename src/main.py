@@ -126,6 +126,7 @@ class EventHandler(BaseHandler):
         start = self.get_argument("start", 0)
         end = self.get_argument("end", 0)
         events = self.database.get_events(start,end)
+        #TODO filter by location stops
         self.write(json_encode(events))
     
 if __name__ == '__main__':
