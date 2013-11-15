@@ -42,7 +42,7 @@ class DatabaseService(object):
             cursor.close()
         
     def get_events(self,start=0,end=0):
-        cmd = "SELECT * FROM history where timestamp >= %s and timestamp <=%s and gforce > 0 and not latitude=0 and not longitude=0"
+        cmd = "SELECT * FROM history where timestamp >= %s and timestamp <=%s and not latitude=0 and not longitude=0"
         cursor = None
         result = None
         try:
