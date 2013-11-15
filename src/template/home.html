@@ -162,12 +162,17 @@
 			var handleData = function(data){
 				var pts = [];
 				var bounds = new google.maps.LatLngBounds();
-				var prevpt = data[0];
+				//var prevpt = data[0];
 				for(var d in data){
 					var pt= data[d];
+					var location = new google.maps.LatLng(pt.latitude, pt.longitude);
+					pts.push({'location':location, 'weight':parseFloat(pt.gforce== null? 0: pt.gforce )});
+					bounds.extend(location);	
+					
+					/*
 					//only take if we have moved 5ms
 					//http://en.wikipedia.org/wiki/Decimal_degrees
-					if(Math.pow((pt.latitude - prevpt.latitude),2) + Math.pow((pt.longitude-prevpt.longitude),2) > 0.000005){
+					//if(Math.pow((pt.latitude - prevpt.latitude),2) + Math.pow((pt.longitude-prevpt.longitude),2) > 0.000005){
 						var location = new google.maps.LatLng(pt.latitude, pt.longitude);
 						pts.push({'location':location, 'weight':parseFloat(pt.gforce== null? 0: pt.gforce )});
 						bounds.extend(location);	
@@ -178,7 +183,7 @@
 						}
 					}
 					//{location: new google.maps.LatLng(37.782, -122.447), weight: 0.5},
-					
+					*/
 				}
 				console.log(pts);
 				var pointArray = new google.maps.MVCArray(pts);			
