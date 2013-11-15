@@ -149,8 +149,8 @@
 			      mapOptions);
 			
 			  heatmap = new google.maps.visualization.HeatmapLayer({
-			  	radius:20, 
-			  	maxIntensity:10, //max gforce value (redest)
+			  	radius:10, 
+			  	maxIntensity:8, //max gforce value (redest)
 			  	dissipating:true,
 			  });
 			
@@ -162,12 +162,23 @@
 			var handleData = function(data){
 				var pts = [];
 				var bounds = new google.maps.LatLngBounds();
+				var prevpt = data[0];
 				for(var d in data){
 					var pt= data[d];
+					//only take if we have moved 5ms
+					//http://en.wikipedia.org/wiki/Decimal_degrees
+					if(Math.pow((pt.latitude - prevpt.latitude),2) + Math.pow((pt.longitude-prevpt.longitude),2) > 0.000005){
+						var location = new google.maps.LatLng(pt.latitude, pt.longitude);
+						pts.push({'location':location, 'weight':parseFloat(pt.gforce== null? 0: pt.gforce )});
+						bounds.extend(location);	
+						prevpt = pt;
+					}else{
+						if(pt.gforce && prevpt.gforce < pt.gforce){
+							pts[pts.length-1].weight = parseFloat(pt.gforce);
+						}
+					}
 					//{location: new google.maps.LatLng(37.782, -122.447), weight: 0.5},
-					var location = new google.maps.LatLng(pt.latitude, pt.longitude);
-					pts.push({'location':location, 'weight':parseFloat(pt.gforce== null? 0: pt.gforce )});
-					bounds.extend(location);
+					
 				}
 				console.log(pts);
 				var pointArray = new google.maps.MVCArray(pts);			
